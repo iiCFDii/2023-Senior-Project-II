@@ -109,10 +109,10 @@ while(True):
             if (cY < cyNeg):
                 print("Move Drone forwards")
                 # moveF(1)
+
             if (cY >= cyNeg and cY <= cyPlus):
                 print("Drone is Centered on Y Axis")
                 cv2.line(image, (cx,0), (cx,height), (0, 200, 0), 2 )
-
 
             if (cX >= cxNeg and cX <= cxPlus):
                 print("Drone is Centered on X Axis")
@@ -135,8 +135,8 @@ while(True):
                 cv2.line(image, (cx,cy), (width,cy), (0, 200, 0), 2 )
                 cv2.line(image, (cx,0), (cx,cy), (0, 200, 0), 2 )
 
-            else:
-                print("Unknown Drone location")
+            # else:
+            #     print("Unknown Drone location")
 
  
         # draw the tag family on the image
