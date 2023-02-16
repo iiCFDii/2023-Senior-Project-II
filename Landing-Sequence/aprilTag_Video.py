@@ -17,8 +17,8 @@ os.environ['DISPLAY'] = ':0'
 
 vid = cv2.VideoCapture(0)
 kernel = np.ones((5, 5), np.uint8)
-width = vid.get(3)
-height = vid.get(4)
+width = int(vid.get(3))
+height = int(vid.get(4))
 fps = vid.get(5)
 
 cx = int(width/2)
@@ -48,6 +48,8 @@ while(True):
     # X = int(moment ["m10"] / moment["m00"])
     # Y = int(moment ["m01"] / moment["m00"])
     cv2.circle(image, (cx, cy), 10, (0, 0, 200), 2)
+    cv2.line(image, (cx,0), (cx,height), (0, 0, 0), 1 )
+    cv2.line(image, (0,cy), (width,cy), (0, 0, 0), 1 )
     cv2.imshow("Image", image)
 
     # define the AprilTags detector options and then detect the AprilTags
@@ -96,22 +98,43 @@ while(True):
             # land(1)
         else:
             if (cX < cxNeg):
-                print("Move Drone right")       # add communication to drone
+                print("Move Drone left")       # add communication to drone
                 # moveR(1)
             if (cY > cyPlus):
                 print("Move Drone backwards")
                 # moveB(1)
             if (cX > cxPlus ):
-                print("Move Drone left")
+                print("Move Drone right")
                 # moveL(1)
             if (cY < cyNeg):
                 print("Move Drone forwards")
                 # moveF(1)
             if (cY >= cyNeg and cY <= cyPlus):
                 print("Drone is Centered on Y Axis")
+                cv2.line(image, (cx,0), (cx,height), (0, 200, 0), 2 )
+
 
             if (cX >= cxNeg and cX <= cxPlus):
                 print("Drone is Centered on X Axis")
+                cv2.line(image, (0,cy), (width,cy), (0, 200, 0), 2 )
+
+
+            if (cX < cxNeg and cY < cyNeg):
+                cv2.line(image, (0,cy), (cx,cy), (0, 200, 0), 2 )
+                cv2.line(image, (cx,0), (cx,cy), (0, 200, 0), 2 )
+
+            elif (cX < cxNeg and cY > cyNeg):
+                cv2.line(image, (0,cy), (cx,cy), (0, 200, 0), 2 )
+                cv2.line(image, (cx,cy), (cx,height), (0, 200, 0), 2 )
+            
+            elif (cX > cxNeg and cY > cyNeg):
+                cv2.line(image, (cx,cy), (width,cy), (0, 200, 0), 2 )
+                cv2.line(image, (cx,cy), (cx,height), (0, 200, 0), 2 )
+
+            elif (cX > cxNeg and cY < cyNeg):
+                cv2.line(image, (cx,cy), (width,cy), (0, 200, 0), 2 )
+                cv2.line(image, (cx,0), (cx,cy), (0, 200, 0), 2 )
+
             else:
                 print("Unknown Drone location")
 
