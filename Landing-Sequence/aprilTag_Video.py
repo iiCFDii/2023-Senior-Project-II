@@ -3,6 +3,8 @@ import argparse
 import cv2
 import os
 import numpy as np 
+import sys
+
 os.environ['DISPLAY'] = ':0'
 # construct the argument parser and parse the arguments
 # ap = argparse.ArgumentParser()
@@ -10,6 +12,9 @@ os.environ['DISPLAY'] = ':0'
 # 	help="path to input image containing AprilTag")
 # args = vars(ap.parse_args())
 #print("test")
+ 
+
+
 vid = cv2.VideoCapture(0)
 kernel = np.ones((5, 5), np.uint8)
 width = vid.get(3)
@@ -25,7 +30,8 @@ cyPlus = cy + 10
 cxNeg = cx - 10
 cyNeg = cy - 10
 
-
+lastX = []
+lastY = []
 print(width)
 print(height)
 
@@ -79,20 +85,35 @@ while(True):
         cv2.line(image, ptD, ptA, (0, 255, 0), 2)
         # draw the center (x, y)-coordinates of the AprilTag
         (cX, cY) = (int(r.center[0]), int(r.center[1]))
+        # print(cX)
+        # lastX[0] = cX
+        # lastY[0] = cY
+
         cv2.circle(image, (cX, cY), 5, (0, 0, 255), -1)
         if (cX >= cxNeg and cX <= cxPlus) and (cY >= cyNeg and cY <= cyPlus):
             cv2.circle(image, (cx, cy), 10, (0, 200, 0), 2)
-            print("AprilTag is Centered")
-        elif (cX < cxNeg and cY < cyNeg):
-            print("Move Drone forward and right")
-        elif (cX < cxNeg and cY > cyPlus):
-            print("Move Drone backwards and right")
-        elif (cX > cxPlus and cY > cyPlus):
-            print("Move Drone backwards and left")
-        elif (cX > cxPlus and cY < cyNeg):
-            print("Move Drone forwards and left")
+            print("AprilTag and Drone are Centered")
+            # land(1)
         else:
-            print("Unknown Drone location")
+            if (cX < cxNeg):
+                print("Move Drone right")       # add communication to drone
+                # moveR(1)
+            if (cY > cyPlus):
+                print("Move Drone backwards")
+                # moveB(1)
+            if (cX > cxPlus ):
+                print("Move Drone left")
+                # moveL(1)
+            if (cY < cyNeg):
+                print("Move Drone forwards")
+                # moveF(1)
+            if (cY >= cyNeg and cY <= cyPlus):
+                print("Drone is Centered on Y Axis")
+
+            if (cX >= cxNeg and cX <= cxPlus):
+                print("Drone is Centered on X Axis")
+            else:
+                print("Unknown Drone location")
 
  
         # draw the tag family on the image
@@ -104,3 +125,6 @@ while(True):
         cv2.imshow("Image", image)
 image.release()
 cv2.destroyAllWindows()
+
+
+
