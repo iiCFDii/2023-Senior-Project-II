@@ -15,3 +15,5 @@ This was used to test functionality of the servo. Eventually the servo will be p
 - [YouTube: Raspberry Pi Servo Motor Control](https://www.youtube.com/watch?v=xHDT4CwjUQE&ab_channel=ExplainingComputers)
 - [Raspberry Pi Documentation](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html)
 - [RPi.GPIO Documentation](https://sourceforge.net/p/raspberry-gpio-python/wiki/PWM/)
+- [Khadas UART Test for wiringPi](https://docs.khadas.com/products/sbc/vim3/applications/gpio/wiringpi-python)
+- [Khadas wiringPi](https://docs.khadas.com/products/sbc/vim3/applications/gpio/wiringpi)
