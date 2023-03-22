@@ -31,25 +31,30 @@ def main():
 	count=0
 	#print("Serial Port initialized\n")
 	#recData=[0,0,0,0,0,0]
-	ser=serial.Serial("/dev/ttyS3")
+	ser=serial.Serial()
+	ser.port="/dev/ttyS3"
 	ser.baudrate=9600
 	ser.parity=serial.PARITY_NONE
 	ser.bytesize=serial.EIGHTBITS
 	ser.stopbits=serial.STOPBITS_ONE
-	ser.timeout=1
+	ser.timeout=0
+	print(ser.get_settings())
 	ser.close()
 	print(ser.is_open)
 	while True:
 		print('\n\n\n\n\n\n NEW DATA ' + str(count))
 		ser.open()
 		print("opened: "+ str(ser.is_open))
-		ser.write(1)
+		#ser.write(1)
 		time.sleep(0.01)
-		ser.write(0)
+		#ser.write(0)
 		#ser.flush()
-		#recData=ser.read(5)
-		recData=ser.readline()
-		print(recData.len())
+		time.sleep(1)
+		recData=ser.read(4)
+		ser.close()
+		#recData=ser.readline()
+		print(recData)
+		print(len(recData))
 		count=count+1
 		
 		#recData[0] = ser.read(1)
@@ -59,7 +64,7 @@ def main():
 		#recData[4] = ser.read(1)
 		#recData[5] = ser.read(1)
 		#print("Reading Serial Data")
-		data = struct.unpack('5b', recData)
+		data = struct.unpack('4b', recData)
 		
 		for p in data:
 			p=chr(p)
