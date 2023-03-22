@@ -18,27 +18,59 @@ Sensor Pin 5 (TX)  --- Vim3 Pin 15 (UARTC_RX)
 
 
 
-from time import time
+import time
 import serial
 import struct
-
+import io
 # initialize serial
-ser = serial.Serial("/dev/ttyS3", 9600, 8, 'N', 1, timeout = 1)
-
-maxWait = 3 # seconds to try for good reading before quitting
+#ser = serial.Serial("/dev/ttyS3", baudrate=9600, bytesize=8, parity=serial.PARITY_NONE, stopbits=1, timeout = 1)
+#maxWait = 3 # seconds to try for good reading before quitting
 
 
 def main(): 
-	print("Serial Port initialized\n")
-	
+	count=0
+	#print("Serial Port initialized\n")
+	#recData=[0,0,0,0,0,0]
+	ser=serial.Serial("/dev/ttyS3")
+	ser.baudrate=9600
+	ser.parity=serial.PARITY_NONE
+	ser.bytesize=serial.EIGHTBITS
+	ser.stopbits=serial.STOPBITS_ONE
+	ser.timeout=1
+	ser.close()
+	print(ser.is_open)
 	while True:
-		recData = ser.read()
-		#print(recData)
+		print('\n\n\n\n\n\n NEW DATA ' + str(count))
+		ser.open()
+		print("opened: "+ str(ser.is_open))
+		#ser.flush()
+		recData=ser.read(5)
+		count=count+1
+		
+		#recData[0] = ser.read(1)
+		#recData[1] = ser.read(1)
+		#recData[2] = ser.read(1)
+		#recData[3] = ser.read(1)
+		#recData[4] = ser.read(1)
+		#recData[5] = ser.read(1)
 		#print("Reading Serial Data")
-		recData = struct.unpack('B', recData)
+		data = struct.unpack('5b', recData)
+		
+		for p in data:
+			p=chr(p)
+			print(p)
+		#for i in range(0,6):
+			#print(recData[i])
+			#data = struct.unpack('B', recData[i])
+			#print(data[0])
+		#data[0].decode('ascii')
 		#print("unpacking serial data")
-		recData = recData[0]
-		print("data: ", recData)#, "\tser.in_waiting: ", ser.in_waiting)
+		#recData = recData[0]
+		print(data)
+		#time.sleep(0.5)
+		ser.close()
+		print("closed: "+str(not ser.is_open))
+		#print("data: ", chr(recData[0]))#, "\tser.in_waiting: ", ser.in_waiting)
 
 
 '''
