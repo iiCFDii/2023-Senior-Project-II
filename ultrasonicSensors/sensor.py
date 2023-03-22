@@ -43,8 +43,13 @@ def main():
 		print('\n\n\n\n\n\n NEW DATA ' + str(count))
 		ser.open()
 		print("opened: "+ str(ser.is_open))
+		ser.write(1)
+		time.sleep(0.01)
+		ser.write(0)
 		#ser.flush()
-		recData=ser.read(5)
+		#recData=ser.read(5)
+		recData=ser.readline()
+		print(recData.len())
 		count=count+1
 		
 		#recData[0] = ser.read(1)
