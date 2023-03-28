@@ -4,6 +4,8 @@ import cv2
 import os
 import numpy as np 
 import sys
+import math
+
 
 os.environ['DISPLAY'] = ':0'
 # construct the argument parser and parse the arguments
@@ -15,7 +17,7 @@ os.environ['DISPLAY'] = ':0'
  
 
 
-vid = cv2.VideoCapture(0)
+vid = cv2.VideoCapture(1)
 kernel = np.ones((5, 5), np.uint8)
 width = int(vid.get(3))
 height = int(vid.get(4))
@@ -34,6 +36,16 @@ lastX = []
 lastY = []
 print(width)
 print(height)
+
+at_detector = Detector(
+families="tag36h11",
+nthreads=1,
+quad_decimate=1.0,
+quad_sigma=0.0,
+refine_edges=1,
+decode_sharpening=0.25,
+debug=0
+)
 
 while(True):
     # load the input image and convert it to grayscale
@@ -58,15 +70,7 @@ while(True):
     # options = apriltag.DetectorOptions(families="tag36h11")
     # detector = apriltag.Detector(options)
     # results = detector.detect(gray)
-    at_detector = Detector(
-    families="tag36h11",
-    nthreads=1,
-    quad_decimate=1.0,
-    quad_sigma=0.0,
-    refine_edges=1,
-    decode_sharpening=0.25,
-    debug=0
-    )
+   
     results = at_detector.detect(gray)
     # print("[INFO] {} total AprilTags detected".format(len(results)))
 
@@ -80,6 +84,8 @@ while(True):
         ptC = (int(ptC[0]), int(ptC[1]))
         ptD = (int(ptD[0]), int(ptD[1]))
         ptA = (int(ptA[0]), int(ptA[1]))
+        size1 = math.sqrt(math.pow(ptA[0]-ptB[0],2)+math.pow(ptA[1]-ptB[1],2))
+        print(size1)
         # draw the bounding box of the AprilTag detection
         cv2.line(image, ptA, ptB, (0, 255, 0), 2)
         cv2.line(image, ptB, ptC, (0, 255, 0), 2)
