@@ -17,7 +17,7 @@ os.environ['DISPLAY'] = ':0'
  
 
 
-vid = cv2.VideoCapture(1)
+vid = cv2.VideoCapture(0)
 kernel = np.ones((5, 5), np.uint8)
 width = int(vid.get(3))
 height = int(vid.get(4))
@@ -98,10 +98,14 @@ while(True):
         # lastY[0] = cY
 
         cv2.circle(image, (cX, cY), 5, (0, 0, 255), -1)
-        if (cX >= cxNeg and cX <= cxPlus) and (cY >= cyNeg and cY <= cyPlus):
-            cv2.circle(image, (cx, cy), 10, (0, 200, 0), 2)
-            print("AprilTag and Drone are Centered")
-            # land(1)
+        if ((cX >= cxNeg and cX <= cxPlus) and (cY >= cyNeg and cY <= cyPlus)) or (size1 > 365):
+            if size1 > 365:
+                print("Drone is close to Landing Pad! - KILL POWER")
+                # kill power
+            else:
+                cv2.circle(image, (cx, cy), 10, (0, 200, 0), 2)
+                print("AprilTag and Drone are Centered")
+                # land(1)
         else:
             if (cX < cxNeg):
                 print("Move Drone left")       # add communication to drone
